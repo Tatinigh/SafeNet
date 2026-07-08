@@ -63,7 +63,7 @@ Provides actionable guidance such as:
 
 Frontend
 
-- React Native
+- Flutter
 
 Backend
 
