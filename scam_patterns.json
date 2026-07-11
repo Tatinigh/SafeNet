@@ -1,0 +1,92 @@
+[
+  {
+    "id": "job_advance_fee_001",
+    "category": "Fake Job Offer",
+    "pattern": "Message congratulates the recipient on being 'selected' for a job at a well-known company, then asks for a registration, verification, or document processing fee to be paid before onboarding.",
+    "why_scam": "Legitimate employers never charge candidates money as part of hiring or onboarding. Advance-fee requests are one of the most common recruitment fraud tactics."
+  },
+  {
+    "id": "bank_kyc_urgency_002",
+    "category": "Phishing / Fake Bank Alert",
+    "pattern": "SMS or email claims the recipient's bank account will be frozen or blocked within hours unless they click a link and 'update KYC' or 're-verify' their account immediately.",
+    "why_scam": "Banks do not threaten account freezes over SMS/email with urgent unofficial links. The urgency is designed to prevent the victim from thinking or verifying independently."
+  },
+  {
+    "id": "upi_qr_refund_003",
+    "category": "Fake UPI / QR Scam",
+    "pattern": "A person claims to owe the victim a refund or payment and asks the victim to scan a QR code or approve a UPI collect request to 'receive' money.",
+    "why_scam": "Scanning a QR code or approving a UPI collect request always sends money OUT, never receives it. This is a common scam disguised as a refund process."
+  },
+  {
+    "id": "otp_share_004",
+    "category": "OTP / Credential Theft",
+    "pattern": "Caller or message impersonates a bank, delivery service, or government agency and asks the victim to share an OTP, PIN, or CVV to 'verify' an order, refund, or account.",
+    "why_scam": "No legitimate institution ever asks for OTPs, PINs, or CVVs over call, SMS, or email. Sharing these grants direct access to funds or accounts."
+  },
+  {
+    "id": "lottery_prize_005",
+    "category": "Lottery / Prize Scam",
+    "pattern": "Message informs the recipient they have won a lottery, prize draw, or lucky draw they never entered, and asks for a processing/tax fee to release winnings.",
+    "why_scam": "You cannot win a contest you never entered. Requests for fees to 'release' winnings are a classic advance-fee fraud pattern."
+  },
+  {
+    "id": "investment_guaranteed_returns_006",
+    "category": "Investment / Crypto Scam",
+    "pattern": "Message or ad promises guaranteed high returns (e.g. 'double your money in 7 days') on a stock, forex, or cryptocurrency investment scheme, often via a Telegram/WhatsApp group.",
+    "why_scam": "No legitimate investment can guarantee high fixed returns; real markets carry risk. Guaranteed-return language is a hallmark of Ponzi-style scams."
+  },
+  {
+    "id": "courier_customs_007",
+    "category": "Fake Courier / Customs Fee",
+    "pattern": "Caller or message claims a parcel addressed to the victim is held at customs or a courier hub and requires a small fee payment to release it.",
+    "why_scam": "Legitimate courier companies bill fees through official, verifiable channels, not via random calls demanding immediate small payments to unfamiliar accounts."
+  },
+  {
+    "id": "tech_support_scam_008",
+    "category": "Fake Tech Support",
+    "pattern": "Pop-up, call, or message claims the victim's device is infected or compromised and urges them to call a number or install remote-access software immediately.",
+    "why_scam": "Real security warnings from operating systems or antivirus software do not include phone numbers to call. Remote access grants scammers full control of the device."
+  },
+  {
+    "id": "romance_relationship_009",
+    "category": "Romance / Relationship Scam",
+    "pattern": "An online relationship develops quickly with someone the victim has never met in person, who eventually requests money for an emergency, travel, or medical expense.",
+    "why_scam": "Scammers build emotional trust over weeks or months specifically to justify a later urgent request for money, which is the actual goal."
+  },
+  {
+    "id": "fake_ecommerce_010",
+    "category": "Fraudulent Shopping Website",
+    "pattern": "An unfamiliar online store offers heavily discounted branded products, requires full payment upfront, and has no verifiable return policy, customer reviews, or contact information.",
+    "why_scam": "Unrealistic discounts combined with no verifiable business information and upfront-only payment are strong indicators of a fake storefront designed to collect payments without shipping goods."
+  },
+  {
+    "id": "deepfake_voice_011",
+    "category": "Deepfake / Voice Cloning Scam",
+    "pattern": "A call using a voice that sounds like a family member claims to be in an emergency (accident, arrest, kidnapping) and urgently requests money be sent immediately, often asking the victim not to tell anyone else.",
+    "why_scam": "AI voice cloning can convincingly mimic a relative's voice. The combination of urgency, secrecy, and a money request is a major red flag regardless of how convincing the voice sounds."
+  },
+  {
+    "id": "loan_app_predatory_012",
+    "category": "Fake Loan App / Predatory Lending",
+    "pattern": "An app or message offers instant loans with minimal documentation, then later threatens the borrower with harassment, contact list exposure, or morphed photos if a hugely inflated repayment is not made quickly.",
+    "why_scam": "Legitimate lenders are regulated and do not threaten borrowers with harassment or privacy violations. Instant no-documentation loans with harassment-based recovery are a known predatory lending scam pattern."
+  },
+  {
+    "id": "fake_customer_care_013",
+    "category": "Fake Customer Care Number",
+    "pattern": "Victim searches online for a company's customer care number and calls a number found via a search engine or social media post, which turns out to be an unofficial number run by scammers.",
+    "why_scam": "Scammers register fake customer care numbers on the open web and social platforms. Official support numbers should only be sourced from the company's verified app or official website."
+  },
+  {
+    "id": "sim_swap_014",
+    "category": "SIM Swap Fraud",
+    "pattern": "Victim receives calls or messages asking for personal ID details or is asked to submit a SIM swap/upgrade request they didn't initiate, often preceding sudden loss of mobile network signal.",
+    "why_scam": "SIM swap fraud lets attackers intercept OTPs sent to a victim's number. Unexpected loss of signal after sharing personal details is a critical warning sign requiring immediate bank/telecom contact."
+  },
+  {
+    "id": "fake_govt_scheme_015",
+    "category": "Fake Government Scheme",
+    "pattern": "Message claims the recipient is eligible for a government subsidy, scholarship, or welfare payment and must pay a 'processing fee' or share bank details via a non-official link to claim it.",
+    "why_scam": "Government schemes are administered through official government portals and never require fees to release entitled benefits."
+  }
+]
