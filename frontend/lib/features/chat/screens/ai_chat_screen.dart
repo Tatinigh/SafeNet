@@ -187,17 +187,6 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 child: Row(
                   children: [
-                    // Plus Icon (Image 2)
-                    IconButton(
-                      icon: const Icon(Icons.add, color: AppTheme.textLightColor),
-                      onPressed: () {
-                        // Quick scan attachments shortcut
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Media upload shortcuts coming soon.')),
-                        );
-                      },
-                    ),
-                    
                     // Input Text Field
                     Expanded(
                       child: TextField(
