@@ -8,7 +8,7 @@ load_dotenv()
 
 client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
-EMBED_MODEL = "text-embedding-004"
+EMBED_MODEL = "gemini-embedding-2"
 
 PATTERNS_PATH = os.path.join(os.path.dirname(__file__), "scam_patterns.json")
 CACHE_PATH = os.path.join(os.path.dirname(__file__), "embeddings_cache.json")
