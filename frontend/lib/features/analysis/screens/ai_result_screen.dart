@@ -14,40 +14,42 @@ class AiResultScreen extends ConsumerWidget {
   const AiResultScreen({super.key, required this.reportId});
 
   // Handle PDF report export
-  void _exportPdf(BuildContext context, AnalysisReport report) async {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => const Center(child: CircularProgressIndicator()),
-    );
+  // Handle PDF report export
+void _exportPdf(BuildContext context, AnalysisReport report) async {
+  showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (_) => const Center(
+      child: CircularProgressIndicator(),
+    ),
+  );
 
-    try {
-      final file = await PdfGenerator.generateReport(report);
-      if (context.mounted) {
-        Navigator.pop(context); // close loader
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Report PDF generated successfully: ${file.path.split('/').last}'),
-            backgroundColor: AppTheme.successColor,
-            action: SnackBarAction(
-              label: 'SHARE',
-              textColor: Colors.white,
-              onPressed: () {
-                Share.shareXFiles([XFile(file.path)], text: 'SafeNet AI Threat Analysis Report');
-              },
-            ),
-          ),
-        );
-      }
-    } catch (e) {
-      if (context.mounted) {
-        Navigator.pop(context); // close loader
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Failed to generate PDF report.'), backgroundColor: AppTheme.dangerColor),
-        );
-      }
-    }
+  try {
+    await PdfGenerator.generateReport(report);
+
+    if (!context.mounted) return;
+
+    Navigator.pop(context);
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text("PDF generated successfully."),
+        backgroundColor: Colors.green,
+      ),
+    );
+  } catch (e) {
+    if (!context.mounted) return;
+
+    Navigator.pop(context);
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text("PDF Error: $e"),
+        backgroundColor: Colors.red,
+      ),
+    );
   }
+}
 
   void _shareReportText(AnalysisReport report) {
     final text = 'SafeNet AI Scam Analysis Alert!\n'

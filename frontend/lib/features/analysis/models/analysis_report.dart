@@ -31,6 +31,51 @@ class AnalysisReport {
   });
 
   factory AnalysisReport.fromJson(Map<String, dynamic> json, {String? id, String? scanType, String? content}) {
+    // Parse reasons: backend returns List<String>, mock returns List<Map>
+    List<AnalysisReason> parsedReasons = [];
+    final rawReasons = json['reasons'];
+    if (rawReasons is List) {
+      parsedReasons = rawReasons.map((item) {
+        if (item is Map<String, dynamic>) {
+          return AnalysisReason.fromJson(item);
+        } else if (item is String) {
+          // Backend returns plain strings — wrap them as a reason
+          return AnalysisReason(
+            title: item,
+            description: item,
+            severity: 'Medium',
+          );
+        }
+        return AnalysisReason(title: '', description: '', severity: 'Low');
+      }).toList();
+    }
+
+    // Parse recommendations: backend returns List<String>
+    List<String> parsedRecs = [];
+    final rawRecs = json['recommendations'];
+    if (rawRecs is List) {
+      parsedRecs = rawRecs.map((e) => e.toString()).toList();
+    }
+
+    // Derive status from riskScore if backend doesn't provide it
+    final int riskScore = (json['risk_score'] ?? 0) as int;
+    String derivedStatus = json['status'] ?? '';
+    if (derivedStatus.isEmpty) {
+      if (riskScore >= 75) {
+        derivedStatus = 'High Risk';
+      } else if (riskScore >= 40) {
+        derivedStatus = 'Suspicious';
+      } else {
+        derivedStatus = 'Safe';
+      }
+    }
+
+    // Derive summary if backend doesn't provide it
+    String derivedSummary = json['summary'] ?? '';
+    if (derivedSummary.isEmpty && parsedReasons.isNotEmpty) {
+      derivedSummary = parsedReasons.first.description;
+    }
+
     return AnalysisReport(
       id: id ?? json['id'] ?? DateTime.now().millisecondsSinceEpoch.toString(),
       timestamp: json['timestamp'] != null 
@@ -38,15 +83,12 @@ class AnalysisReport {
           : DateTime.now(),
       scanType: scanType ?? json['scan_type'] ?? 'Text',
       content: content ?? json['content'] ?? '',
-      riskScore: json['risk_score'] ?? 0,
-      confidence: json['confidence'] ?? 0,
-      status: json['status'] ?? 'Safe',
-      summary: json['summary'] ?? '',
-      reasons: (json['reasons'] as List?)
-              ?.map((item) => AnalysisReason.fromJson(item))
-              .toList() ?? 
-          [],
-      recommendations: List<String>.from(json['recommendations'] ?? []),
+      riskScore: riskScore,
+      confidence: json['confidence'] ?? riskScore,
+      status: derivedStatus,
+      summary: derivedSummary,
+      reasons: parsedReasons,
+      recommendations: parsedRecs,
       scamDna: ScamDna.fromJson(json['scam_dna'] ?? {}),
       isFavorite: json['is_favorite'] ?? false,
     );

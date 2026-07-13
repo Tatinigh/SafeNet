@@ -67,13 +67,18 @@ class AnalysisNotifier extends StateNotifier<AnalysisState> {
       );
       
       return result.id;
-    } catch (e) {
-      state = AnalysisState(
-        isLoading: false,
-        errorMessage: 'Connection timed out. Please check your network and retry.',
-      );
-      return null;
-    }
+    } catch (e, stackTrace) {
+  print("========== ANALYSIS ERROR ==========");
+  print(e);
+  print(stackTrace);
+
+  state = AnalysisState(
+    isLoading: false,
+    errorMessage: e.toString(),
+  );
+
+  return null;
+}
   }
 
   /// Sets the currently displaying status step text.

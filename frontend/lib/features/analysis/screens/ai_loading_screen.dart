@@ -37,16 +37,19 @@ class _AiLoadingScreenState extends ConsumerState<AiLoadingScreen> with SingleTi
   ];
 
   @override
-  void initState() {
-    super.initState();
-    _rotationController = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 4),
-    )..repeat();
+void initState() {
+  super.initState();
 
+  _rotationController = AnimationController(
+    vsync: this,
+    duration: const Duration(seconds: 4),
+  )..repeat();
+
+  WidgetsBinding.instance.addPostFrameCallback((_) {
     _startStepAnimations();
     _executeAnalysis();
-  }
+  });
+}
 
   @override
   void dispose() {
@@ -71,21 +74,36 @@ class _AiLoadingScreenState extends ConsumerState<AiLoadingScreen> with SingleTi
   void _executeAnalysis() async {
     // Call repository scan
     final reportId = await ref.read(analysisProvider.notifier).startAnalysis(
-      widget.input,
-      widget.scanType,
-    );
+  widget.input,
+  widget.scanType,
+);
+
+print("REPORT ID: $reportId");
 
     if (_aborted) return;
 
     if (reportId != null && mounted) {
       context.pushReplacement('/ai-result', extra: {'reportId': reportId});
     } else if (mounted) {
-      final error = ref.read(analysisProvider).errorMessage;
+      final rawError = ref.read(analysisProvider).errorMessage ?? '';
+      // Extract user-friendly message from DioException / HTTP detail field
+      String displayMsg = 'The AI service is temporarily busy. Please try again in a few moments.';
+      if (rawError.contains('detail')) {
+        try {
+          final start = rawError.indexOf('"detail":"') + 10;
+          final end = rawError.indexOf('"', start);
+          if (start > 10 && end > start) {
+            displayMsg = rawError.substring(start, end);
+          }
+        } catch (_) {}
+      } else if (rawError.isNotEmpty && !rawError.contains('DioException') && rawError.length < 200) {
+        displayMsg = rawError;
+      }
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
           title: const Text('Analysis Failed'),
-          content: Text(error ?? 'Something went wrong during verification.'),
+          content: Text(displayMsg),
           actions: [
             TextButton(
               onPressed: () {

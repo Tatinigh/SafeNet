@@ -1,10 +1,10 @@
 import 'dart:io';
-import 'package:flutter/services.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:path_provider/path_provider.dart';
-import '../services/api_client.dart';
 import '../../features/analysis/models/analysis_report.dart';
+import 'package:flutter/foundation.dart';
+import 'package:printing/printing.dart';
 
 /// Utility to generate structured PDF reports for scan analyses.
 class PdfGenerator {
@@ -193,10 +193,9 @@ class PdfGenerator {
                 style: pw.TextStyle(fontSize: 12, fontWeight: pw.FontWeight.bold, color: primaryColor),
               ),
               pw.SizedBox(height: 6),
-              pw.ListView.builder(
-                itemCount: report.reasons.length,
-                itemBuilder: (context, index) {
-                  final reason = report.reasons[index];
+              pw.Column(
+                crossAxisAlignment: pw.CrossAxisAlignment.start,
+                children: report.reasons.map((reason) {
                   return pw.Padding(
                     padding: const pw.EdgeInsets.only(bottom: 8),
                     child: pw.Row(
@@ -222,7 +221,7 @@ class PdfGenerator {
                       ],
                     ),
                   );
-                },
+                }).toList(),
               ),
               pw.SizedBox(height: 16),
 
@@ -248,11 +247,24 @@ class PdfGenerator {
     );
 
     // Save PDF to temp folder
-    final directory = await getTemporaryDirectory();
-    final path = '${directory.path}/safenet_report_${report.id}.pdf';
-    final file = File(path);
-    await file.writeAsBytes(await pdf.save());
-    return file;
+    final bytes = await pdf.save();
+
+if (kIsWeb) {
+  await Printing.layoutPdf(
+    onLayout: (PdfPageFormat format) async => bytes,
+    name: 'SafeNet_Report_${report.id}.pdf',
+  );
+
+  return File('');
+}
+
+// Android / Windows / Desktop
+final directory = await getTemporaryDirectory();
+final path = '${directory.path}/safenet_report_${report.id}.pdf';
+final file = File(path);
+await file.writeAsBytes(bytes);
+
+return file;
   }
 
   static pw.Widget _buildDnaRow(String label, int value) {

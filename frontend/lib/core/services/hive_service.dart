@@ -37,6 +37,17 @@ class HiveService {
       debugPrint('Hive initialized and boxes opened successfully.');
     } catch (e) {
       debugPrint('Hive initialization error: $e. Falling back to memory boxes.');
+      // Ensure late fields are always initialized to prevent LateInitializationError
+      try {
+        _reportsBox = await Hive.openBox<AnalysisReport>(reportsBoxName);
+      } catch (_) {
+        _reportsBox = await Hive.openBox<AnalysisReport>('${reportsBoxName}_fallback');
+      }
+      try {
+        _chatsBox = await Hive.openBox<ChatMessage>(chatsBoxName);
+      } catch (_) {
+        _chatsBox = await Hive.openBox<ChatMessage>('${chatsBoxName}_fallback');
+      }
     }
   }
 

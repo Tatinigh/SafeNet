@@ -81,7 +81,7 @@ def analyze_content(text_input: str = "", image_path: str = None) -> dict:
     try:
         # Request generation using structured schema validation rules
         response = client.models.generate_content(
-            model='gemini-2.5-flash',
+            model="gemini-flash-latest",   
             contents=contents,
             config=types.GenerateContentConfig(
                 system_instruction=system_instruction,
@@ -94,10 +94,27 @@ def analyze_content(text_input: str = "", image_path: str = None) -> dict:
         return json.loads(response.text)
 
     except Exception as api_err:
+        # Detailed error is only logged to the console
+        print(f"[SafeNet AI Engine Exception] Detailed Traceback: {str(api_err)}")
         return {
             "risk_score": 0,
-            "reasons": [f"Critical API pipeline execution failure: {str(api_err)}"],
-            "recommendations": ["The evaluation service is temporarily unavailable. Please retry shortly."]
+            "status": "Unavailable",
+            "summary": "The AI analysis service is temporarily busy. Please try again in a few moments.",
+            "reasons": [
+                "The AI analysis service is temporarily busy. Please try again in a few moments."
+            ],
+            "recommendations": [
+                "Verify your connection and retry the scan.",
+                "Please try again in a few moments."
+            ],
+            "confidence": 0,
+            "scam_dna": {
+                "urgency": 0,
+                "fear": 0,
+                "money": 0,
+                "identity": 0,
+                "branding": 0
+            }
         }
 
 # --- Standalone Terminal Verification Environment ---

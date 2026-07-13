@@ -6,8 +6,13 @@ class OcrService {
   OcrService._();
 
   /// Extracts text from a local image file.
-  /// Includes fallback simulation for simulator environments.
+  /// Includes fallback simulation for simulator/web environments.
   static Future<String> extractText(String imagePath) async {
+    // ML Kit is not available on Flutter Web — use fallback immediately
+    if (kIsWeb) {
+      return _getSimulatorFallback(imagePath);
+    }
+
     final InputImage inputImage = InputImage.fromFilePath(imagePath);
     final TextRecognizer textRecognizer = TextRecognizer(script: TextRecognitionScript.latin);
 

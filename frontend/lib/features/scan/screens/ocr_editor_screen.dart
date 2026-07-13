@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -80,9 +81,25 @@ class _OcrEditorScreenState extends State<OcrEditorScreen> {
               child: Container(
                 height: 150,
                 color: isDark ? const Color(0xFF1E293B) : Colors.grey.shade100,
-                child: widget.imagePath.startsWith('http')
-                    ? Image.network(widget.imagePath, fit: BoxFit.contain, errorBuilder: (context, error, stackTrace) => const Icon(Icons.broken_image))
-                    : Image.file(File(widget.imagePath), fit: BoxFit.cover),
+                child: kIsWeb
+                    ? const Center(
+                        child: Icon(
+                          Icons.image,
+                          size: 70,
+                          color: Colors.grey,
+                        ),
+                      )
+                    : widget.imagePath.startsWith('http')
+                        ? Image.network(
+                            widget.imagePath,
+                            fit: BoxFit.contain,
+                            errorBuilder: (context, error, stackTrace) =>
+                                const Icon(Icons.broken_image),
+                          )
+                        : Image.file(
+                            File(widget.imagePath),
+                            fit: BoxFit.cover,
+                          ),
               ),
             ),
             const SizedBox(height: 20),

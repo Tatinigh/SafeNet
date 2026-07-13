@@ -30,7 +30,6 @@ class ApiClient {
     try {
       final response = await _dio.post('/analyze/text', data: {
         'text': text,
-        'type': scanType,
       });
       if (response.statusCode == 200) {
         return AnalysisReport.fromJson(response.data, scanType: scanType, content: text);
@@ -61,15 +60,21 @@ class ApiClient {
     }
   }
 
-  /// Sends image bytes/path to extract OCR and analyze.
+  /// Sends image bytes to be analyzed via multipart upload.
   Future<AnalysisReport> analyzeImage(String imagePath, String scanType, String extractedText) async {
     try {
-      // Mocking actual image upload since file systems differ on test platforms
-      final response = await _dio.post('/analyze/image', data: {
-        'image_path': imagePath,
-        'scan_type': scanType,
-        'extracted_text': extractedText,
+      // On web, file paths aren't valid — fall directly to mock
+      if (kIsWeb || imagePath.isEmpty) {
+        throw Exception('Web platform: using mock fallback.');
+      }
+      final formData = FormData.fromMap({
+        'file': await MultipartFile.fromFile(imagePath),
       });
+      final response = await _dio.post(
+        '/analyze/image',
+        data: formData,
+        options: Options(contentType: 'multipart/form-data'),
+      );
       if (response.statusCode == 200) {
         return AnalysisReport.fromJson(response.data, scanType: scanType, content: extractedText);
       }
@@ -82,10 +87,12 @@ class ApiClient {
   }
 
   /// Sends a QR code payload (usually a URL or text) to check threat level.
+  /// The backend /analyze/qr endpoint treats QR as text content.
   Future<AnalysisReport> analyzeQr(String qrContent) async {
     try {
-      final response = await _dio.post('/analyze/qr', data: {
-        'qr_content': qrContent,
+      // QR content is text, so send it as a text analysis request
+      final response = await _dio.post('/analyze/text', data: {
+        'text': qrContent,
       });
       if (response.statusCode == 200) {
         return AnalysisReport.fromJson(response.data, scanType: 'QR Code', content: qrContent);
