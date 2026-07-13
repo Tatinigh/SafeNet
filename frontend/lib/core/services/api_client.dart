@@ -9,7 +9,7 @@ class ApiClient {
   late final Dio _dio;
   
   // Change base URL to point to localhost or staging API
-  static const String baseUrl = 'http://localhost:8000';
+  static const String baseUrl = 'http://10.199.102.100:8000';
 
   ApiClient() {
     _dio = Dio(
